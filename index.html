@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>VesselOps</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: Arial; background: #0f172a; color: white; padding: 20px; }
+    h1 { color: #38bdf8; }
+    .card { background: #1e293b; padding: 15px; margin: 10px 0; border-radius: 8px; }
+    button { padding: 8px 12px; background: #38bdf8; border: none; border-radius: 6px; cursor: pointer; }
+    input, textarea { width: 100%; margin: 5px 0; padding: 6px; border-radius: 4px; border: none; }
+    ul { padding-left: 20px; }
+  </style>
+</head>
+<body>
+
+<h1>⚓ VesselOps</h1>
+
+<div class="card">
+  <h2>Vessel Profile</h2>
+  <p><strong>Name:</strong> Tempest</p>
+  <p><strong>Status:</strong> Operational</p>
+</div>
+
+<div class="card">
+  <h2>Add Maintenance Entry</h2>
+  <input id="maintTitle" placeholder="Service type" />
+  <textarea id="maintNotes" placeholder="Notes"></textarea>
+  <button onclick="addMaintenance()">Add Entry</button>
+</div>
+
+<div class="card">
+  <h2>Maintenance Log</h2>
+  <ul id="maintenanceList"></ul>
+</div>
+
+<script>
+let maintenance = [];
+
+function addMaintenance() {
+  const title = document.getElementById("maintTitle").value;
+  const notes = document.getElementById("maintNotes").value;
+
+  if (!title) return;
+
+  maintenance.push({ title, notes, date: new Date().toLocaleString() });
+
+  renderMaintenance();
+
+  document.getElementById("maintTitle").value = "";
+  document.getElementById("maintNotes").value = "";
+}
+
+function renderMaintenance() {
+  const list = document.getElementById("maintenanceList");
+  list.innerHTML = "";
+
+  maintenance.forEach(entry => {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${entry.title}</strong> - ${entry.date}<br>${entry.notes}`;
+    list.appendChild(li);
+  });
+}
+</script>
+
+</body>
+</html>
