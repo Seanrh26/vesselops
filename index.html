@@ -1,8 +1,4 @@
-<script>
-const supabase = window.supabase.createClient(
-"https://racmzlcntqxmccdfnlkw.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhY216bGNudHF4bWNjZGZubGt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA4MzMzMjMsImV4cCI6MjA4NjQwOTMyM30.A27vHaWszlrxYoR7iW5q8ZLgN4UJwNoTrXIekgNa8mA"
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html>
 <head>
   <title>VesselOps</title>
@@ -25,13 +21,13 @@ const supabase = window.supabase.createClient(
   <h2>Vessel Profile</h2>
   <p><strong>Name:</strong> Tempest</p>
   <p><strong>Status:</strong> Operational</p>
-</div>
+</div>https://supabase.com/dashboard/project/racmzlcntqxmccdfnlkw/settings/api-keys/legacy
 
 <div class="card">
   <h2>Add Maintenance Entry</h2>
   <input id="maintTitle" placeholder="Service type" />
   <textarea id="maintNotes" placeholder="Notes"></textarea>
-  <button onclick="addMaintenance()">Add Entry</button>
+  <button type="button" onclick="addMaintenance()">Add Entry</button>
 </div>
 
 <div class="card">
@@ -40,7 +36,8 @@ const supabase = window.supabase.createClient(
 </div>
 
 <script>
-const { createClient } = supabase;
+const { createClient } = window.supabase;
+
 const supabaseClient = createClient(
   "https://racmzlcntqxmccdfnlkw.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhY216bGNudHF4bWNjZGZubGt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA4MzMzMjMsImV4cCI6MjA4NjQwOTMyM30.A27vHaWszlrxYoR7iW5q8ZLgN4UJwNoTrXIekgNa8mA"
@@ -73,9 +70,9 @@ async function addMaintenance() {
 
   if (!title) return;
 
-  const { error } = await supabase.from("maintenance").insert([
-    { title, notes }
-  ]);
+  const { error } = await supabaseClient
+    .from("maintenance")
+    .insert([{ title, notes }]);
 
   if (error) {
     console.error(error);
