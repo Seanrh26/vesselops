@@ -34,7 +34,7 @@ const supabaseClient = createClient(
 
 async function loadMaintenance() {
   const { data, error } = await supabaseClient
-    .from("entries")
+    .from("maintenance")
     .select("*")
     .order("created_at", { ascending: false });
 
@@ -62,8 +62,8 @@ async function addMaintenance() {
   const note = title + " - " + notes;
 
   const { error } = await supabaseClient
-    .from("entries")
-    .insert([{ note }]);
+    .from("maintenance")
+    .tinsert([{ note }]);
 
   if (error) {
     console.error("Insert error:", error);
