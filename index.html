@@ -22,18 +22,18 @@
 <h3>Maintenance Log</h3>
 <ul id="maintenanceList"></ul>
 
-
-<!-- Supabase Library MUST come first -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-const supabase = window.supabase.createClient(
+const { createClient } = supabase;
+
+const supabaseClient = createClient(
   "https://racmzlcntqxmccdfnlkw.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhY216bGNudHF4bWNjZGZubGt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA4MzMzMjMsImV4cCI6MjA4NjQwOTMyM30.A27vHaWszlrxYoR7iW5q8ZLgN4UJwNoTrXIekgNa8mA"
 );
 
 async function loadMaintenance() {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from("entries")
     .select("*")
     .order("created_at", { ascending: false });
@@ -61,13 +61,13 @@ async function addMaintenance() {
 
   const note = title + " - " + notes;
 
-  const { error } = await supabase
+  const { error } = await supabaseClient
     .from("entries")
     .insert([{ note }]);
 
   if (error) {
     console.error("Insert error:", error);
-    alert("Insert failed. Check console.");
+    alert("Insert failed.");
     return;
   }
 
@@ -77,7 +77,6 @@ async function addMaintenance() {
   loadMaintenance();
 }
 
-// Load entries when page opens
 loadMaintenance();
 </script>
 
