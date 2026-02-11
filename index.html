@@ -1,2 +1,92 @@
 "https://racmzlcntqxmccdfnlkw.supabase.co"
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhY216bGNudHF4bWNjZGZubGt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA4MzMzMjMsImV4cCI6MjA4NjQwOTMyM30.A27vHaWszlrxYoR7iW5q8ZLgN4UJwNoTrXIekgNa8mA"
+<!DOCTYPE html>
+<html>
+<head>
+  <title>VesselOps</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body { font-family: Arial; background: #0f172a; color: white; padding: 20px; }
+    h1 { color: #38bdf8; }
+    .card { background: #1e293b; padding: 15px; margin: 10px 0; border-radius: 8px; }
+    button { padding: 8px 12px; background: #38bdf8; border: none; border-radius: 6px; cursor: pointer; }
+    input, textarea { width: 100%; margin: 5px 0; padding: 6px; border-radius: 4px; border: none; }
+    ul { padding-left: 20px; }
+  </style>
+</head>
+<body>
+
+<h1>⚓ VesselOps</h1>
+
+<div class="card">
+  <h2>Vessel Profile</h2>
+  <p><strong>Name:</strong> Tempest</p>
+  <p><strong>Status:</strong> Operational</p>
+</div>
+
+<div class="card">
+  <h2>Add Maintenance Entry</h2>
+  <input id="maintTitle" placeholder="Service type" />
+  <textarea id="maintNotes" placeholder="Notes"></textarea>
+  <button onclick="addMaintenance()">Add Entry</button>
+</div>
+
+<div class="card">
+  <h2>Maintenance Log</h2>
+  <ul id="maintenanceList"></ul>
+</div>
+
+<script>
+const supabase = window.supabase.createClient(
+  "YOUR_SUPABASE_URL",
+  "YOUR_PUBLIC_ANON_KEY"
+);
+
+async function loadMaintenance() {
+  const { data, error } = await supabase
+    .from("maintenance")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  const list = document.getElementById("maintenanceList");
+  list.innerHTML = "";
+
+  data.forEach(entry => {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${entry.title}</strong> - ${new Date(entry.created_at).toLocaleString()}<br>${entry.notes || ""}`;
+    list.appendChild(li);
+  });
+}
+
+async function addMaintenance() {
+  const title = document.getElementById("maintTitle").value;
+  const notes = document.getElementById("maintNotes").value;
+
+  if (!title) return;
+
+  const { error } = await supabase.from("maintenance").insert([
+    { title, notes }
+  ]);
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  document.getElementById("maintTitle").value = "";
+  document.getElementById("maintNotes").value = "";
+
+  loadMaintenance();
+}
+
+loadMaintenance();
+</script>
+
+</body>
+</html>
