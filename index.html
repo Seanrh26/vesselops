@@ -46,10 +46,112 @@ function addMaintenance() {
   document.getElementById("maintTitle").value = "";
   document.getElementById("maintNotes").value = "";
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const supabase = window.supabase.createClient(
+  "https://racmzlcntqxmccdfnlkw.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhY216bGNudHF4bWNjZGZubGt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA4MzMzMjMsImV4cCI6MjA4NjQwOTMyM30.A27vHaWszlrxYoR7iW5q8ZLgN4UJwNoTrXIekgNa8mA"
+);
+
+async function loadMaintenance() {
+  const { data, error } = await supabase
+    .from("entries")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  const list = document.getElementById("maintenanceList");
+  list.innerHTML = "";
+
+  data.forEach(entry => {
+    const li = document.createElement("li");
+    li.textContent = entry.note;
+    list.appendChild(li);
+  });
+}
+
+async function addMaintenance() {
+  const title = document.getElementById("maintTitle").value;
+  const notes = document.getElementById("maintNotes").value;
+
+  if (!title) return;
+
+  const note = title + " - " + notes;
+
+  const { error } = await supabase
+    .from("entries")
+    .insert([{ note }]);
+
+  if (error) {
+    console.error(error);
+    alert("Insert failed");
+    return;
+  }
+
+  document.getElementById("maintTitle").value = "";
+  document.getElementById("maintNotes").value = "";
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const supabase = window.supabase.createClient(
+  "https://racmzlcntqxmccdfnlkw.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhY216bGNudHF4bWNjZGZubGt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA4MzMzMjMsImV4cCI6MjA4NjQwOTMyM30.A27vHaWszlrxYoR7iW5q8ZLgN4UJwNoTrXIekgNa8mA"
+);
+
+async function loadMaintenance() {
+  const { data, error } = await supabase
+    .from("entries")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  const list = document.getElementById("maintenanceList");
+  list.innerHTML = "";
+
+  data.forEach(entry => {
+    const li = document.createElement("li");
+    li.textContent = entry.note;
+    list.appendChild(li);
+  });
+}
+
+async function addMaintenance() {
+  const title = document.getElementById("maintTitle").value;
+  const notes = document.getElementById("maintNotes").value;
+
+  if (!title) return;
+
+  const note = title + " - " + notes;
+
+  const { error } = await supabase
+    .from("entries")
+    .insert([{ note }]);
+
+  if (error) {
+    console.error(error);
+    alert("Insert failed");
+    return;
+  }
+
+  document.getElementById("maintTitle").value = "";
+  document.getElementById("maintNotes").value = "";
+
   loadMaintenance();
 }
 
 loadMaintenance();
+</script>
+</script>
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
