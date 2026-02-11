@@ -4,48 +4,26 @@
   <title>VesselOps</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
+
 <body style="font-family: Arial; background:#0f172a; color:white; padding:20px;">
 
 <h1>⚓ VesselOps</h1>
 
 <h3>Add Maintenance</h3>
+
 <input id="maintTitle" placeholder="Service type" />
 <br><br>
+
 <textarea id="maintNotes" placeholder="Notes"></textarea>
 <br><br>
-<button type="button" onclick="addMaintenance()">Add Entry</button>
+
+<button onclick="addMaintenance()">Add Entry</button>
 
 <h3>Maintenance Log</h3>
 <ul id="maintenanceList"></ul>
 
-<script>
-function loadMaintenance() {
-  const data = JSON.parse(localStorage.getItem("maintenance") || "[]");
-  const list = document.getElementById("maintenanceList");
-  list.innerHTML = "";
 
-  data.forEach(entry => {
-    const li = document.createElement("li");
-    li.textContent = entry.title + " - " + entry.notes;
-    list.appendChild(li);
-  });
-}
-
-function addMaintenance() {
-  const title = document.getElementById("maintTitle").value;
-  const notes = document.getElementById("maintNotes").value;
-
-  if (!title) return;
-
-  const data = JSON.parse(localStorage.getItem("maintenance") || "[]");
-
-  data.unshift({ title, notes });
-
-  localStorage.setItem("maintenance", JSON.stringify(data));
-
-  document.getElementById("maintTitle").value = "";
-  document.getElementById("maintNotes").value = "";
-
+<!-- Supabase Library MUST come first -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
@@ -61,7 +39,7 @@ async function loadMaintenance() {
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error(error);
+    console.error("Load error:", error);
     return;
   }
 
@@ -88,58 +66,8 @@ async function addMaintenance() {
     .insert([{ note }]);
 
   if (error) {
-    console.error(error);
-    alert("Insert failed");
-    return;
-  }
-
-  document.getElementById("maintTitle").value = "";
-  document.getElementById("maintNotes").value = "";
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-const supabase = window.supabase.createClient(
-  "https://racmzlcntqxmccdfnlkw.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhY216bGNudHF4bWNjZGZubGt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA4MzMzMjMsImV4cCI6MjA4NjQwOTMyM30.A27vHaWszlrxYoR7iW5q8ZLgN4UJwNoTrXIekgNa8mA"
-);
-
-async function loadMaintenance() {
-  const { data, error } = await supabase
-    .from("entries")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    console.error(error);
-    return;
-  }
-
-  const list = document.getElementById("maintenanceList");
-  list.innerHTML = "";
-
-  data.forEach(entry => {
-    const li = document.createElement("li");
-    li.textContent = entry.note;
-    list.appendChild(li);
-  });
-}
-
-async function addMaintenance() {
-  const title = document.getElementById("maintTitle").value;
-  const notes = document.getElementById("maintNotes").value;
-
-  if (!title) return;
-
-  const note = title + " - " + notes;
-
-  const { error } = await supabase
-    .from("entries")
-    .insert([{ note }]);
-
-  if (error) {
-    console.error(error);
-    alert("Insert failed");
+    console.error("Insert error:", error);
+    alert("Insert failed. Check console.");
     return;
   }
 
@@ -149,9 +77,8 @@ async function addMaintenance() {
   loadMaintenance();
 }
 
+// Load entries when page opens
 loadMaintenance();
-</script>
-</script>
 </script>
 
 </body>
