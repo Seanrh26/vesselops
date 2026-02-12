@@ -1,45 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>VesselOps</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-</head>
-
-<body style="font-family: Arial; background:#0f172a; color:white; padding:20px;">
-
-<h1>⚓ VesselOps</h1>
-
-<h3>Add Maintenance</h3>
-
-<input id="maintTitle" placeholder="Service type" />
-<br><br>
-
-<textarea id="maintNotes" placeholder="Notes"></textarea>
-<br><br>
-
-<button onclick="addMaintenance()">Add Entry</button>
-
-<h3>Maintenance Log</h3>
-<ul id="maintenanceList"></ul>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
 const { createClient } = supabase;
 
 const supabaseClient = createClient(
   "https://racmzlcntqxmccdfnlkw.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhY216bGNudHF4bWNjZGZubGt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA4MzMzMjMsImV4cCI6MjA4NjQwOTMyM30.A27vHaWszlrxYoR7iW5q8ZLgN4UJwNoTrXIekgNa8mA"
+  "YOUR_ANON_KEY_HERE"
 );
 
 async function loadMaintenance() {
+  alert("Loading maintenance...");
+
   const { data, error } = await supabaseClient
     .from("maintenance")
     .select("*")
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error("Load error:", error);
+    alert("Load ERROR: " + error.message);
     return;
   }
 
@@ -48,26 +24,36 @@ async function loadMaintenance() {
 
   data.forEach(entry => {
     const li = document.createElement("li");
-    li.textContent = entry.note;
+    li.textContent = entry.title + " - " + entry.notes;
     list.appendChild(li);
   });
 }
 
 async function addMaintenance() {
+  alert("Button clicked");
+
   const title = document.getElementById("maintTitle").value;
   const notes = document.getElementById("maintNotes").value;
 
-  if (!title) return;
+  if (!title) {
+    alert("Title missing");
+    return;
+  }
 
-  const note = title + " - " + notes;
+  alert("Inserting into Supabase...");
 
   const { data, error } = await supabaseClient
     .from("maintenance")
-    .insert([{ note }])
+    .insert([
+      {
+        title: title,
+        notes: notes
+      }
+    ])
     .select();
 
   if (error) {
-    alert("ERROR: " + error.message);
+    alert("INSERT ERROR: " + error.message);
   } else {
     alert("SUCCESS: Inserted");
     console.log(data);
@@ -81,7 +67,3 @@ async function addMaintenance() {
 
 loadMaintenance();
 </script>
-
-</body>
-</html>
-add debug alerts to inserrt
