@@ -48,24 +48,15 @@ async function loadMaintenance() {
 
   data.forEach(entry => {
     const li = document.createElement("li");
-    li.textContent =
-  new Date(entry.created_at).toLocaleDateString() +
-  " | " +
-  entry.title +
-  " - " +
-  entry.notes;
+
+    li.innerHTML = `
+      ${entry.title} - ${entry.notes}
+      <button onclick="deleteMaintenance(${entry.id})" style="margin-left:10px;">❌</button>
+    `;
+
     list.appendChild(li);
   });
 }
-
-async function addMaintenance() {
-  const title = document.getElementById("maintTitle").value;
-  const notes = document.getElementById("maintNotes").value;
-
-  if (!title) {
-    alert("Title missing");
-    return;
-  }
 
   const { error } = await supabaseClient
     .from("maintenance")
