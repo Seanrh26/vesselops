@@ -61,14 +61,16 @@ async function addMaintenance() {
 
   const note = title + " - " + notes;
 
-  const { error } = await supabaseClient
+  const { data, error } = await supabaseClient
     .from("maintenance")
-    .tinsert([{ note }]);
+    .insert([{ note }])
+    .select();
 
   if (error) {
-    console.error("Insert error:", error);
-    alert("Insert failed.");
-    return;
+    alert("ERROR: " + error.message);
+  } else {
+    alert("SUCCESS: Inserted");
+    console.log(data);
   }
 
   document.getElementById("maintTitle").value = "";
@@ -82,3 +84,4 @@ loadMaintenance();
 
 </body>
 </html>
+add debug alerts to inserrt
