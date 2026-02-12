@@ -48,7 +48,7 @@ async function loadMaintenance() {
     const li = document.createElement("li");
 
     const text = document.createElement("span");
-    const date = new Date(entry.created_at).toLocaleDateString();
+    const date = new Date(entry.created_at).toLocaleString();
 
 text.textContent =
   date + " | " + entry.title + " - " + entry.notes;
