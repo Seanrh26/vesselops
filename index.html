@@ -49,29 +49,20 @@ async function loadMaintenance() {
   data.forEach(entry => {
     const li = document.createElement("li");
 
-    li.innerHTML = `
-      ${entry.title} - ${entry.notes}
-      <button onclick="deleteMaintenance(${entry.id})" style="margin-left:10px;">❌</button>
-    `;
+    const text = document.createElement("span");
+    text.textContent = entry.title + " - " + entry.notes;
 
+    const btn = document.createElement("button");
+    btn.textContent = " ❌";
+    btn.style.marginLeft = "10px";
+    btn.onclick = function () {
+      deleteMaintenance(entry.id);
+    };
+
+    li.appendChild(text);
+    li.appendChild(btn);
     list.appendChild(li);
   });
-}
-
-  const { error } = await supabaseClient
-    .from("maintenance")
-    .insert([{ title: title, notes: notes }]);
-
-  if (error) {
-    alert("Insert ERROR: " + error.message);
-  } else {
-    alert("SUCCESS");
-  }
-
-  document.getElementById("maintTitle").value = "";
-  document.getElementById("maintNotes").value = "";
-
-  loadMaintenance();
 }
 
 loadMaintenance();
