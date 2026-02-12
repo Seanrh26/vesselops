@@ -1,8 +1,4 @@
-<script>
-alert("Script loaded");
-
-const supabaseClient = ...
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <title>VesselOps</title>
@@ -22,15 +18,13 @@ const supabaseClient = ...
 <br><br>
 
 <button onclick="addMaintenance()">Add Entry</button>
-  
+
 <h3>Maintenance Log</h3>
 <ul id="maintenanceList"></ul>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <script>
-alert("Script running");
-
 const supabaseClient = supabase.createClient(
   "https://racmzlcntqxmccdfnlkw.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhY216bGNudHF4bWNjZGZubGt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA4MzMzMjMsImV4cCI6MjA4NjQwOTMyM30.A27vHaWszlrxYoR7iW5q8ZLgN4UJwNoTrXIekgNa8mA"
@@ -67,6 +61,45 @@ async function loadMaintenance() {
     li.appendChild(btn);
     list.appendChild(li);
   });
+}
+
+async function addMaintenance() {
+  const title = document.getElementById("maintTitle").value;
+  const notes = document.getElementById("maintNotes").value;
+
+  if (!title) {
+    alert("Title missing");
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("maintenance")
+    .insert([{ title: title, notes: notes }]);
+
+  if (error) {
+    alert("Insert ERROR: " + error.message);
+  }
+
+  document.getElementById("maintTitle").value = "";
+  document.getElementById("maintNotes").value = "";
+
+  loadMaintenance();
+}
+
+async function deleteMaintenance(id) {
+  const confirmDelete = confirm("Delete this entry?");
+  if (!confirmDelete) return;
+
+  const { error } = await supabaseClient
+    .from("maintenance")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    alert("Delete ERROR: " + error.message);
+  }
+
+  loadMaintenance();
 }
 
 loadMaintenance();
