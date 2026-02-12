@@ -1,6 +1,32 @@
+<<!DOCTYPE html>
+<html>
+<head>
+  <title>VesselOps</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
+<body style="font-family: Arial; background:#0f172a; color:white; padding:20px;">
+
+<h1>⚓ VesselOps</h1>
+
+<h3>Add Maintenance</h3>
+
+<input id="maintTitle" placeholder="Service type" />
+<br><br>
+
+<textarea id="maintNotes" placeholder="Notes"></textarea>
+<br><br>
+
+<button onclick="addMaintenance()">Add Entry</button>
+
+<h3>Maintenance Log</h3>
+<ul id="maintenanceList"></ul>
+
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <script>
+alert("Script running");
+
 const supabaseClient = supabase.createClient(
   "https://racmzlcntqxmccdfnlkw.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhY216bGNudHF4bWNjZGZubGt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA4MzMzMjMsImV4cCI6MjA4NjQwOTMyM30.A27vHaWszlrxYoR7iW5q8ZLgN4UJwNoTrXIekgNa8mA"
@@ -36,14 +62,12 @@ async function addMaintenance() {
     return;
   }
 
-  const { data, error } = await supabaseClient
+  const { error } = await supabaseClient
     .from("maintenance")
-    .insert([
-      { title: title, notes: notes }
-    ]);
+    .insert([{ title: title, notes: notes }]);
 
   if (error) {
-    alert("INSERT ERROR: " + error.message);
+    alert("Insert ERROR: " + error.message);
   } else {
     alert("SUCCESS");
   }
@@ -56,3 +80,6 @@ async function addMaintenance() {
 
 loadMaintenance();
 </script>
+
+</body>
+</html>
