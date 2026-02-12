@@ -18,7 +18,21 @@
 <br><br>
 
 <button onclick="addMaintenance()">Add Entry</button>
+async function deleteMaintenance(id) {
+  const confirmDelete = confirm("Delete this entry?");
+  if (!confirmDelete) return;
 
+  const { error } = await supabaseClient
+    .from("maintenance")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    alert("Delete ERROR: " + error.message);
+  } else {
+    loadMaintenance();
+  }
+}
 <h3>Maintenance Log</h3>
 <ul id="maintenanceList"></ul>
 
