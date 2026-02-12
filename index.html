@@ -48,7 +48,12 @@ async function loadMaintenance() {
 
   data.forEach(entry => {
     const li = document.createElement("li");
-    li.textContent = entry.title + " - " + entry.notes;
+    li.textContent =
+  new Date(entry.created_at).toLocaleDateString() +
+  " | " +
+  entry.title +
+  " - " +
+  entry.notes;
     list.appendChild(li);
   });
 }
